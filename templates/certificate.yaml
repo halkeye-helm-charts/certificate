@@ -1,0 +1,22 @@
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  labels:
+{{ include "certificate.labels" . | indent 4 }}
+  name: {{ include "certificate.fullname" . }}
+spec:
+  {{- if .Values.dnsNames  }}
+  dnsNames:
+{{ .Values.dnsNames | toYaml | indent 4 }}
+  {{- end }}
+  {{- if .Values.acme  }}
+  acme:
+{{ .Values.acme | toYaml | indent 4 }}
+  {{- end }}
+  {{- if .Values.commonName  }}
+  dnsNames: {{ .Values.commonName }}
+  {{- end }}
+  issuerRef:
+    name: {{ .Values.issuerRef.name }}
+    kind: {{ .Values.issuerRef.kind }}
+  secretName: {{ .Values.secretName }}

@@ -5,16 +5,16 @@ metadata:
 {{ include "certificate.labels" . | indent 4 }}
   name: {{ include "certificate.fullname" . }}
 spec:
-  {{- if .Values.dnsNames  }}
+{{- with .Values.dnsNames  }}
   dnsNames:
-{{ .Values.dnsNames | toYaml | indent 4 }}
-  {{- end }}
-  {{- if .Values.acme  }}
+{{ . | toYaml | indent 4 }}
+{{- end }}
+{{- with .Values.acme }}
   acme:
-{{ .Values.acme | toYaml | indent 4 }}
-  {{- end }}
-  {{- if .Values.commonName  }}
-  dnsNames: {{ .Values.commonName }}
+{{ . | toYaml | indent 4 }}
+{{- end }}
+  {{- with .Values.commonName  }}
+  commonName: {{ . | quote }}
   {{- end }}
   issuerRef:
     name: {{ .Values.issuerRef.name }}
